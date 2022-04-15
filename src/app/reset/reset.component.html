@@ -1,0 +1,29 @@
+<header class="header-item">
+  <img class="logo" src="assets/images/logo.png">
+</header>
+
+<div class="sign_up_sec">
+	<div class="sign_up_conatiner">
+		<div class="sign_up_title">Reset your password</div>
+		<div class="form_of_sign_up d-flex flex-column">
+      <form [formGroup]="resetForm" (ngSubmit)="onForget()">
+        <div class="form-group">
+          <input id="email" class="form-control" type="email" value="{{mail}}" disabled style="background-color:transparent;" >
+        </div>
+
+        <div class="form-group" [ngClass]="{ 'has-error': formControls.password.errors }">
+          <input formControlName="password" id="password" class="form-control" type="password" placeholder="Enter Password">
+          <div *ngIf="isSubmitted && formControls.password.errors">
+            <div *ngIf="formControls.password.errors.required" class="error">Password is required.</div>
+            <div *ngIf="formControls.password.errors.minlength" class="error">Password should be greter then 6 character.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input formControlName="confpassword" id="confpassword" class="form-control" type="text" placeholder="Enter Confirm Password">
+        </div>
+  			<button [disabled]="!password && !confpassword" class="btn-full">Reset Password</button>
+      </form>
+		</div>
+	</div>
+</div>

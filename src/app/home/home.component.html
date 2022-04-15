@@ -1,0 +1,484 @@
+<app-header>
+</app-header>
+<ngx-spinner bdColor="rgba(255,255,255,0.7)" size="medium" color="#ff9000" type="ball-triangle-path"
+    [fullScreen]="true">
+</ngx-spinner>
+<ng-container *ngIf="loadingRouteConfig">Loading route config...</ng-container>
+<a id="button_top" onclick="window.scrollTo(0, 0);"></a>
+<div class="main_container d-flex align-items-start">
+    <div class="left_sidebars">
+        <div class="profile_image">
+            <img [src]="profileImg" onerror="this.src='/assets/images/character.png';">
+        </div>
+        <div class="profile_name">{{name}}</div>
+        <div class="friends_Posts d-flex align-items-center">
+            <div class="total_friends_of_user d-flex align-items-center">
+                <div class="my_friends">Friends</div>
+                <div class="my_friends_numbers">{{count_frd <= 100 ? count_frd : '100+' }}</div>
+                </div>
+                <div class="total_posts_of_user d-flex align-items-center">
+                    <div class="my_friends">Posts</div>
+                    <div class="my_friends_numbers">{{user_post <= 100 ? user_post : '100+' }}</div>
+                    </div>
+                </div>
+                <a class="my_post_links" href="profile/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user"></i>
+                        <div>Go to your Profile</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="account/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user-cog"></i>
+                        <div>Account Setting</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="friends/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user-plus"></i>
+                        <div class="badges_for_fr position-relative"
+                            [attr.data-content]="frd_request_count === 0 ? '' : frd_request_count">Friend Requests</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="search/{{id}}">
+                    <div class="left_content">
+                        <img src="/assets/images/searching.png" alt="search">
+                        <div>Search for someone</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="peopleknow/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-users"></i>
+                        <div class="badges_for_pymk position-relative"
+                            [attr.data-content]="countSuggest === 0 ? '' : countSuggest">People you may know</div>
+                    </div>
+                </a>
+                <!-- <a class="my_post_links" href="theme">
+            <div class="left_content">
+                <i class="fas fa-cog"></i>
+                <div>Customization</div>
+            </div>
+        </a> -->
+            </div>
+            <div class="main_areas">
+                <div class="main_area_contents">
+                    <div class="write_words position-relative" style="padding-bottom: 10px !important;">
+                        <input #textmsgPost type="text"
+                            placeholder="What is going on in your gaming world today {{name}}!"
+                            (click)="openTextDialog($event)">
+                        <div class="slider_bid_like-share d-flex flex-column">
+                            <input type="file" style="display:none" #file class="btn btn-primary"
+                                (change)="openDialog($event)" multiple="" />
+                            <div class="take_action post_take_action" (click)="file.click();" title="Photos/Videos">
+                                <button class="like_sec" style="display: contents;">
+                                    <i class="fa fa-camera"></i>
+                                    <div>Photos/Videos</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main_area_contents timeline" *ngFor="let data of datas | slice:0:totalDisplay;let i = index"
+                    id="posts_img">
+                    <div *ngIf="ready" class="main_post_contents d-flex flex-column"
+                        id="main_post_contents_{{data._id}}">
+                        <div class="d-flex show_basic_info" style="width: 100%"
+                            (mouseleave)="showbasicProfile2[i]=false">
+                            <div class="profile_pic_profile position-relative-img">
+                                <img *ngIf="data.type === 'community' || data.type === 'promotion'"
+                                    src="/assets/images/character.png"
+                                    onerror="this.src='/assets/images/character.png';">
+                                <img *ngIf="data.type !== 'community' && data.type !== 'promotion'"
+                                    [src]="data.post_profileImg" onerror="this.src='/assets/images/character.png';">
+                                <div class="basic_info" *ngIf="showbasicProfile[i]">
+                                    <div class="d-flex">
+                                        <img [src]="data.post_profileImg"
+                                            onerror="this.src='/assets/images/character.png';" class="hover-info-img">
+                                        <div style="padding: 10px;">
+                                            <a href="profile/{{data.userId}}">
+                                                <div class="profile_basic_info set_redirect_link">{{data.post_user}}
+                                                </div>
+                                            </a>
+                                            <div class="profile_basic_info">{{data.post_user_designation}}</div>
+                                            <div class="profile_basic_info">{{data.post_user_email}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="full-width-50" *ngIf="current_user['data']._id !== data.userId">
+                                        <i class="fa fa-comments-o" style="margin: 0px 11px 0px 23px"></i>
+                                        <a href="chating/{{id}}">
+                                            <div style="display: contents;color: #000;">Message</div>
+                                        </a>
+                                    </div>
+                                    <div class="full-width-50" *ngIf="current_user['data']._id == data.userId">
+                                        <i class="fa fa-comments-o" style="margin: 0px 11px 0px 23px"></i>
+                                        <div style="display: contents;">Edit Profile</div>
+                                    </div>
+                                    <div class="full-width-20" *ngIf="current_user['data']._id !== data.userId">
+                                        <i class="fas fa-user-check" style="margin-left: 18px"></i>
+                                    </div>
+                                    <div class="full-width-20" *ngIf="current_user['data']._id == data.userId"
+                                        (click)="showProfile()" title="View as">
+                                        <i class="fas fa-eye" style="margin-left: 18px"></i>
+                                    </div>
+                                    <div class="full-width-20">
+                                        <i class="fas fa-ellipsis-h" style="margin-left: 18px"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="name_and_desc" style="width: 100%">
+                                <div *ngIf="data.type !== 'community' && data.type !== 'promotion'"
+                                    class="d-flex justify-content-between align-items-center">
+                                    <a href="profile/{{data.userId}}" *ngIf="current_user['data']._id === data.userId">
+                                        <div class="profile_name_of_poster">{{data.post_user}}</div>
+                                    </a>
+                                    <a href="profile/{{data.userId}}" *ngIf="current_user['data']._id !== data.userId"
+                                        (mouseover)="showbasicProfile2[i]=true">
+                                        <div class="profile_name_of_poster">{{data.post_user}}</div>
+                                    </a>
+                                    <div class="province d-flex align-items-center">
+                                        <a class="location_btn" style="display: flex; flex-direction: row; align-items: center;" href="https://www.google.com/maps/search/?api=1&query={{data.city ? data.city : 'New York'}}%2C%20{{data.state ? data.state :
+                                            'United States of America'}}" target="_blank">
+                                            <img src="assets/images/add_ob.png">
+                                            <div>{{data.city ? data.city : 'City'}}, {{data.state ? data.state :
+                                                'Province'}}</div>
+                                        </a>
+                                    </div>
+                                    <div class="basic_info" *ngIf="showbasicProfile2[i]"
+                                        (mouseleave)="showbasicProfile2[i]=false">
+                                        <div class="d-flex">
+                                            <img [src]="data.post_profileImg"
+                                                onerror="this.src='/assets/images/character.png';"
+                                                class="hover-info-img2">
+                                            <div style="padding: 10px;">
+                                                <a href="profile/{{data.userId}}">
+                                                    <div class="profile_basic_info set_redirect_link">{{data.post_user}}
+                                                    </div>
+                                                </a>
+                                                <div class="profile_basic_info"><i class="fas fa-user-tie"
+                                                        style="margin-right: 10px; color: #0F1B31;"></i>{{data.post_user_designation ?
+                                                    data.post_user_designation : 'designation'}}</div>
+                                                <div class="profile_basic_info"><i class="fas fa-envelope"
+                                                        style="margin-right: 10px; color: #0F1B31;"></i>{{data.post_user_email ?
+                                                    data.post_user_email : 'Email'}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="full-width-50" *ngIf="current_user['data']._id !== data.userId">
+                                            <i class="fa fa-comments-o" style="margin: 0px 11px 0px 23px"></i>
+                                            <a href="chating/{{id}}?userId={{data.userId}}&&user={{data.post_user}}">
+                                                <div style="display: contents;color: #000;">Message</div>
+                                            </a>
+                                        </div>
+                                        <div class="full-width-50" *ngIf="current_user['data']._id == data.userId"
+                                            (click)="showProfile()">
+                                            <i class="fa fa-comments-o" style="margin: 0px 11px 0px 10px"></i>
+                                            <div style="display: contents; font-size: 15px;">Edit Profile</div>
+                                        </div>
+                                        <div class="full-width-20" *ngIf="current_user['data']._id !== data.userId">
+                                            <i class="fas fa-user-check" style="margin-left: 15px"></i>
+                                        </div>
+                                        <div class="full-width-20" *ngIf="current_user['data']._id == data.userId"
+                                            (click)="showProfile()" title="View as">
+                                            <i class="fas fa-eye" style="margin-left: 15px"></i>
+                                        </div>
+                                        <div class="dropdown-container full-width-20" tabindex="-1">
+                                            <div class="three-dots"></div>
+                                            <div class="dropdown">
+                                                <a href="profile/{{data.userId}}/about">
+                                                    <div style="color: #000; padding: 5px 5px;">About</div>
+                                                </a>
+                                                <a href="profile/{{data.userId}}/photos">
+                                                    <div style="color: #000; padding: 5px 5px;">Photos</div>
+                                                </a>
+                                                <a href="profile/{{data.userId}}/videos">
+                                                    <div style="color: #000; padding: 5px 5px;">Videos</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="data_album" *ngIf="data.name !== undefined"> <span
+                                        style="font-weight: bold;font-size: 16px;"> Album: </span> {{data.name}} </div>
+                                <div class="data_album" *ngIf="data.type === 'community' || data.type === 'promotion'">
+                                    <span style="font-weight: bold;font-size: 16px;text-transform: capitalize;">
+                                        {{data.type}} Post</span>
+                                </div>
+                                <div id="sview_{{data._id}}" class="item_desc mt-2"
+                                    style="width: 100%;word-wrap: break-word;white-space: pre-line;" [innerHtml]="data.description">
+                                    <!-- {{data.description.length > 60 ? (data.description | slice:0:60) + '...' :
+                                    data.description}} -->
+                                </div>
+                                <div id="view_{{data._id}}" class="item_desc mt-2 desc_contain"
+                                    style="word-wrap: break-word;display: none;white-space: pre-line;" [innerHtml]="data.description">
+                                    <!-- {{data.description}} -->
+                                </div>
+                                <a class="view_more_{{data._id}}" id="view_more_{{data._id}}"
+                                    style="color: #ff9000;cursor: pointer;text-decoration: underline;font-size: 14px;"
+                                    *ngIf="data.description.length > 60 && !show_more" (click)="view_more(data._id)">View More</a>
+                                <a class="view_less_{{data._id}}" id="view_less_{{data._id}}"
+                                    style="color: #ff9000;cursor: pointer;text-decoration: underline;font-size: 14px;"
+                                    *ngIf="data.description.length > 60 && show_more" (click)="view_less(data._id)">View Less</a>
+                            </div>
+                        </div>
+
+                        <div class="slider_bid_like-share d-flex flex-column" style="width: 100%">
+                            <div class="one_image" *ngIf="data.imageUrl.length == 1">
+                                <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                    onerror="this.src='/assets/images/character.png';"
+                                    [imageSize]="{width: '100%', height: '320px'}" [showArrow]=false
+                                    class="slider_image" [images]="data.imageUrl" #nav></ng-image-slider>
+                            </div>
+                            <div *ngIf="data.imageUrl.length == 2">
+                                <div class="item two_image">
+                                    <ng-image-slider [videoAutoPlay]=true
+                                        onerror="this.src='/assets/images/character.png';" [animationSpeed]="0.3"
+                                        [autoSlide]=0 [lazyLoading]=true [defaultActiveImage]=1
+                                        [imageSize]="{width: '49%'}" [showArrow]=false class="slider_image"
+                                        [images]="data.imageUrl" #nav></ng-image-slider>
+                                </div>
+                            </div>
+                            <div *ngIf="data.imageUrl.length == 3">
+                                <div class="item three_image" *ngIf="data.imageUrl[0].size == 100">
+                                    <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                        [animationSpeed]="0.3" [autoSlide]=0 [imageSize]="{width: '99%'}"
+                                        animationSpeed=0.1 [showArrow]=false class="slider_image"
+                                        [images]="data.imageUrl" #nav></ng-image-slider>
+                                    <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                        [animationSpeed]="0.3" [autoSlide]=0 [imageSize]="{width: '49%', height: 200}"
+                                        [showArrow]=false class="slider_image_2" [images]="data.imageUrl" #nav>
+                                    </ng-image-slider>
+                                </div>
+                            </div>
+                            <div *ngIf="data.imageUrl.length == 4">
+                                <div class="item four_image">
+                                    <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                        [animationSpeed]="0.3" [autoSlide]=0 [imageSize]="{width: '49%'}"
+                                        [showArrow]=false class="slider_image" [images]="data.imageUrl" #nav>
+                                    </ng-image-slider>
+                                    <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                        [animationSpeed]="0.3" [autoSlide]=0 [imageSize]="{width: '49%'}"
+                                        [showArrow]=false class="slider_image_4" [images]="data.imageUrl" #nav>
+                                    </ng-image-slider>
+                                </div>
+                            </div>
+                            <div *ngIf="data.imageUrl.length > 4">
+                                <div class="item four_image">
+                                    <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                        [animationSpeed]="0.3" [autoSlide]=0 [imageSize]="{width: '49%'}"
+                                        [showArrow]=false class="slider_image" [images]="data.imageUrl" #nav>
+                                    </ng-image-slider>
+                                    <ng-image-slider [videoAutoPlay]=true [lazyLoading]=true [defaultActiveImage]=1
+                                        [animationSpeed]="0.3" [autoSlide]=0 [imageSize]="{width: '49%'}"
+                                        [showArrow]=false class="slider_image_5" [images]="data.imageUrl" title="more"
+                                        #nav></ng-image-slider>
+                                </div>
+                            </div>
+                            <div
+                                [ngClass]="current_user['data']._id !== data.userId ? 'take_action' : 'no_share_action'">
+                                <button class="showLikes" (click)="likeIt(data._id);">
+                                    <i class="fa" id="{{data._id}}"
+                                        [ngClass]="postlikeId.includes(data._id)  ? 'fa-thumbs-up' : 'fa-thumbs-o-up'"></i>
+                                    <div *ngIf="data.like.length !== 0">Like<span>{{data.like.length !== 0 ? (data._id
+                                            ===
+                                            tempLikePostId) ? data.like.length + temCntLike : (data.like.length +
+                                            temCntLike ===
+                                            0) ? '' : data.like.length : ''}}</span></div>
+                                    <!-- <div *ngIf="data.like.length === 0">Like<span>{{data.like.length === 0 ? (data._id
+                                            ===
+                                            tempLikePostId) ? data.like.length + temCntLike : (data.like.length +
+                                            temCntLike ===
+                                            0) ? '' : data.like.length}}</span></div> -->
+                                    <!-- <div>Like<span>{{ (data._id === tempLikePostId ) ? data.like.length + temCntLike :
+                                    (data.like.length + temCntLike === 0) ? '' : data.like.length }}</span></div> -->
+                                </button>
+                                <div class="tooltiptext" id="like_{{data._id}}">
+                                    <div id="tooltiptexts_{{data._id}}" class="tooltiptexts"
+                                        *ngFor="let like of data.like.slice().reverse() | slice:0:6">
+                                        <span id="like" style="color: #000">{{like.name}}</span>
+                                    </div>
+                                </div>
+                                <div class="tooltiptext">
+                                    <div id="tooltiptexts" class="tooltiptexts">
+                                        <span id="like_{{data._id}}"> </span>
+                                    </div>
+                                </div>
+                                <button class="comment_sec_{{data._id}} comment_sec" (click)="open_comments(data._id)">
+                                    <i class="far fa-comment-dots"></i>
+                                    <div *ngIf="data.comment.length !== 0">Comment<span>{{data.comment.length !== 0 ?
+                                            (data._id
+                                            === tempPostId) ? data.comment.length + temCmnt.length : data.comment.length
+                                            :
+                                            ''}}</span></div>
+                                    <div *ngIf="data.comment.length === 0">Comment<span>{{data.comment.length === 0 ?
+                                            (data._id
+                                            === tempPostId) ? data.comment.length + temCmnt.length : ''
+                                            :data.comment.length
+                                            }}</span></div>
+                                </button>
+                                <button class="share_sec_{{data._id}} share_sec" (click)="share(data._id)"
+                                    *ngIf="current_user['data']._id !== data.userId">
+                                    <i class="far fa-share"></i>
+                                    <!-- todo work on share button tomorrow -->
+                                    <!-- <share-buttons theme="circles-dark"
+                                        [include]="['copy', 'facebook', 'email', 'messenger', 'mix', 'line', 'linkedin', 'pinterest', 'print', 'reddit', 'sms', 'telegram', 'tumblr', 'twitter', 'viber', 'vk', 'xing', 'whatsapp']"
+                                        [showIcon]="true"
+                                        [showText]="false"
+                                        url="https://rodrigo.kamada.com.br/"
+                                        description="Angular Share Buttons"
+                                        twitterAccount="rodrigokamada"
+                                        class="pt-5">
+                                    </share-buttons> -->
+                                    <div *ngIf="data.share.length !== 0">Share <span> {{data.share.length}} </span>
+                                    </div>
+                                    <div *ngIf="data.share.length === 0">Share</div>
+                                </button>
+                                <div class="sharing_container_{{data._id}} sharing_container" style="display: none;">
+                                    <div class="share_users">
+                                        <div class="user_profile" (click)="sharing(data._id, data.post_user)"
+                                            style="cursor: pointer;">
+                                            <p>Share with me!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="write_comments">
+                                <form (ngSubmit)="addComments(data._id, name, profileImg)" [(formGroup)]="commentsForm">
+                                    <input type="text" autocomplete="off" placeholder=" Write a comment...!"
+                                        formControlName="newcomment">
+                                </form>
+                            </div>
+                            <div class="comments_container_{{data._id}} comments_container" style="display: none;"
+                                *ngIf="data.comment.length > 0 || temCmnt.length > 0">
+                                <div class="comment_title">Comments:</div>
+                                <ng-container *ngFor="let temp of temCmnt.slice().reverse() | slice:0:2; let i = index">
+                                    <div class="comment_user d-flex" *ngIf="checkTem && temp.postId === data._id">
+                                        <img [src]="temp.profilePic" onerror="this.src='/assets/images/character.png';">
+                                        <div>
+                                            <div class="commenter"> {{temp.userName}} </div>
+                                            <div class="comment_here"> {{temp.data}} </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                                <div (mouseleave)="!showbasicProfile3[i]=false" class="comment_user d-flex"
+                                    *ngFor="let comnt of data.comment.slice().reverse(); let i = index">
+                                    <img [src]="comnt.profile" onerror="this.src='/assets/images/character.png';">
+                                    <div>
+                                        <a href="profile/{{comnt.userId}}"
+                                            *ngIf="current_user['data']._id === comnt.userId">
+                                            <div class="commenter as">{{comnt.name | titlecase}}</div>
+                                        </a>
+                                        <a href="profile/{{comnt.userId}}"
+                                            *ngIf="current_user['data']._id !== comnt.userId"
+                                            (mouseover)="!showbasicProfile3[i]=true">
+                                            <div class="commenter sa">{{comnt.name | titlecase}}</div>
+                                        </a>
+                                        <div class="comment_here">{{comnt.newcomment}}</div>
+                                    </div>
+                                    <div class="show_basic_info_card" (mouseleave)="showbasicProfile3[i]=false">
+                                        <div class="basic_info2" *ngIf="showbasicProfile3[i]">
+                                            <div class="d-flex">
+                                                <img [src]="comnt.profile"
+                                                    onerror="this.src='/assets/images/character.png';"
+                                                    class="hover-info-img">
+                                                <div class="basic_profile_icons">
+                                                    <a href="profile/{{comnt.userId}}">
+                                                        <div style="text-transform: capitalize;"
+                                                            class="profile_basic_info set_redirect_link">{{comnt.name}}
+                                                        </div>
+                                                    </a>
+                                                    <div class="icons_showing_card">
+                                                        <div class="profile_basic_info"><i class="fas fa-user-tie"
+                                                                style="padding-right: 10px"></i>{{comnt.designation ?
+                                                            comnt.designation : 'Designation'}}</div>
+                                                        <div class="profile_basic_info"><i class="fas fa-envelope"
+                                                                style="margin-right: 10px"></i>{{comnt.email ?
+                                                            comnt.email :
+                                                            'Email'}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <span *ngIf="data.comment.length > 3"> <button (click)="view_more_comment(data._id)">View More</button></span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ng-container *ngIf="message">
+                    <div class="main_post_content d-flex flex-column"
+                        style="color: #0F1B31; background: #fff; text-align: center;">
+                        <h6>{{message}}</h6>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div class="right_sidebar">
+                <div>
+                    <div class="cat_search position-relative">
+                        <ng-autocomplete class="autocomplete-container" #searchText [data]="allUsers"
+                            placeHolder="Search someone" [searchKeyword]="keyword" [itemTemplate]="itemTemplate"
+                            [notFoundTemplate]="notFoundTemplate">
+                        </ng-autocomplete>
+
+                        <ng-template #itemTemplate let-item>
+                            <div class="d-flex allusers_set">
+                                <div class="profile_pics position-relative">
+                                    <img [src]="item.profileImgURl" onerror="this.src='/assets/images/character.png';">
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="profile/{{item._id}}">
+                                            <div class="search_somenone_profile" [innerHTML]="item.name | titlecase">
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #notFoundTemplate let-notFound>
+                            <div [innerHTML]="notFound"></div>
+                        </ng-template>
+                    </div>
+                    <div class="put_ads_here">Put Your Ads here!</div>
+                    <div class="chat_sec">
+                        <div class="chat_title">
+                            <i class="far fa-comments"></i>
+                            <div>Chat</div>
+                        </div>
+                        <div *ngIf="frdDetails.length > 0; else elseFriend">
+                            <div class="online_sec">
+                                <div class="online_title">Online</div>
+                                <div *ngFor="let frddetail of frdDetails | slice:0:5">
+                                    <div class="online_user" *ngIf="frddetail.content == 1">
+                                        <img [src]="frddetail.profileImgURl"
+                                            onerror="this.src='/assets/images/character.png';">
+                                        <div>{{frddetail.name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="online_sec offline_sec">
+                                <div class="online_title">Offline</div>
+                                <div *ngFor="let frddetail of frdDetails | slice:0:5">
+                                    <div class="online_user" *ngIf="frddetail.content == 0">
+                                        <img [src]="frddetail.profileImgURl"
+                                            onerror="this.src='/assets/images/character.png';">
+                                        <div>{{frddetail.name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #elseFriend class="card card-body">
+                            <div class="view_all_notification"
+                              style="text-align: center;padding: 0.5em;">
+                              <a style="padding: 5px 10px;color: #ff9000;background: none;">Oops you have not make any friend till now 😯</a>
+                            </div>
+                        </ng-template>
+                        <div style="display: flex;align-items: center;justify-content: center;">
+                            <a href="chating/{{id}}" style="color: #ff9000;">Chat Panel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

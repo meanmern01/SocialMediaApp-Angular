@@ -1,0 +1,108 @@
+<div style="border-bottom: 1px solid #000000;align-items: center;">
+    <button class="close" mat-button (click)="Close()">x</button>
+    <h2 style="font-size: 1.25rem;text-align: center;padding: 10px;margin-bottom: 0;background: #0a1221;color: aliceblue;">
+        Create Post</h2>
+</div>
+<div style="padding: 20px 20px 20px 20px;">
+    <div>
+        <img width="40" height="40" [src]="smallProfile" onerror="this.src='/assets/images/character.png';"
+            style="border-radius: 50%;" /> {{name}}
+    </div>
+    <br />
+    <div style="max-height: 60vh;">
+        <div>
+            <textarea #postMsg name="Text1" [(ngModel)]="postMsgDoc" (click)="onFocus()" style="resize: none !important;background: aliceblue;resize: none;"
+                cols="40" rows="5" placeholder="What is going on in your gaming world today!"
+                style="width: 100%; height: 100%; border: none; padding: 8px; min-height: 70px; max-height: 70px;"
+                required></textarea>
+                <a class="emoji-content" (click)="toggleEmojiPicker()">😀</a>
+                <span style="position: absolute; right: 8em;">
+                    <emoji-mart *ngIf="showEmojiPicker" showPreview="false" sheetSize="16" (emojiClick)="addEmoji($event)" set="twitter"></emoji-mart>
+                </span>
+        </div>
+        <!-- Comment in future use -->
+        <!-- <ngx-masonry [options]="gridOptions" [ordered]="true">
+                <img *ngFor="let image of temp_images;" [src]="image.src"/>
+        </ngx-masonry> -->
+
+        <div class="text-center col-md-12 load_new_image" style="margin-top: 10px;" id="load_new_image_id" (click)="onFocus()">
+            <ng-container *ngIf="!twoimg && !threeimg && !fourimg && !fiveimg">
+                <a *ngIf="shows" class="cancel_btn" (click)="cancel()"><img src="../../assets/images/closes.png"
+                        width="25px" height="25px" alt="image_post_show"> </a>
+                <span *ngFor="let image of temp_images; let i = index;">
+                    <img #postImage *ngIf="image.data == 'img'" class="change_width" style="width: 100%; height: 130px;"
+                        [src]="image.src" />
+                    <video #postImage controls *ngIf="image.data == 'video'" class="change_width"
+                        style="width: 100%; height: 130px;" [src]="image.src"></video>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="twoimg && !threeimg && !fiveimg && !fourimg">
+                <a *ngIf="shows" class="cancel_btn" (click)="cancel()"><img src="../../assets/images/closes.png"
+                        width="25px" height="25px" alt="image_post_show"> </a>
+                <!-- <div> -->
+                <span class="img_show" *ngFor="let image of temp_images; let i = index;">
+                    <img #postImage *ngIf="image.data == 'img'" class="change_width"
+                        style="width: 100%; height: 130px; object-fit: cover;" [src]="image.src" />
+                    <video #postImage controls *ngIf="image.data == 'video'" class="change_width"
+                        style="width: 100%; height: 130px; object-fit: cover;" [src]="image.src"></video>
+                </span>
+                <!-- </div> -->
+            </ng-container>
+            <ng-container *ngIf="threeimg && !twoimg && !fiveimg && !fourimg">
+                <a *ngIf="shows" class="cancel_btn" (click)="cancel()"><img src="../../assets/images/closes.png"
+                        width="25px" height="25px" alt="image_post_show"> </a>
+                <span class="img_show" *ngFor="let image of temp_images; let i = index;first as isFirst">
+                    <img #postImage *ngIf="image.data == 'img'" class="change_width"
+                        style="width: '{{(isFirst) ? '100%' : '100%'}}'; height: 130px; object-fit: cover;"
+                        [src]="image.src" />
+                    <video #postImage controls *ngIf="image.data == 'video'" class="change_width"
+                        style="width: '{{(isFirst) ? '100%' : '100%'}}'; height: 130px; object-fit: cover;"
+                        [src]="image.src"></video>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="fourimg && !twoimg && !threeimg && !fiveimg">
+                <a *ngIf="shows" class="cancel_btn" (click)="cancel()"><img src="../../assets/images/closes.png"
+                        width="25px" height="25px" alt="image_post_show"> </a>
+                <span class="img_show" *ngFor="let image of temp_images; let i = index;">
+                    <img #postImage class="change_width" style="width: '100%'; height: 130px; object-fit: cover;"
+                        [src]="image.src" *ngIf="image.data == 'img'" />
+                    <video #postImage controls class="change_width"
+                        style="width: '100%'; height: 130px; object-fit: cover;" [src]="image.src"
+                        *ngIf="image.data == 'video'"></video>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="fiveimg && !fourimg && !twoimg && !threeimg">
+                <a *ngIf="shows" class="cancel_btn" (click)="cancel()"><img src="../../assets/images/closes.png"
+                        width="25px" height="25px" alt="image_post_show"> </a>
+                <span class="img_show" *ngFor="let image of temp_images; let i = index; last as isLast">
+                    <img #postImage class="{{(i + 1 > 4) ? 'hidden_last_img' : 'change_width'}} blur_image"
+                        style="width: 100%; height: 130px; object-fit: cover;" *ngIf="image.data == 'img'"
+                        [src]="image.src" />
+                    <video #postImage controls class="{{(i + 1 > 4) ? 'hidden_last_img' : 'change_width'}} blur_image"
+                        style="width: 100%; height: 130px; object-fit: cover;" *ngIf="image.data == 'video'"
+                        [src]="image.src"> </video>
+                </span>
+                <div class="bottom-left set_view_more">View More</div>
+            </ng-container>
+        </div>
+    </div>
+    <input type="file" style="display:none" #file class="btn btn-primary" (change)="openNewDialog($event)"
+        multiple="" />
+    <div style="border: 1px solid #000000; border-radius: 6px; margin: 5px 0px 10px 0px; padding: 5px;cursor: pointer;"
+        (click)="file.click();">
+        <img src='/assets/images/photos.png' style="width: 5%; float: right; margin-top: -2px;"
+            class="create_post_photo_icon" />
+        <h6 style="margin-bottom: 0px; ">Upload Photos/Videos</h6>
+    </div>
+    <div class="status_post">
+        <select name="status" [(ngModel)]="status" required>
+            <option value="undefined" selected disabled>Select status</option>
+            <option value="0">Public</option>
+            <option value="1">Private</option>
+        </select>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" style="width: 100%;background: #0a1221;border: 0;"
+            (click)="postSave()">Post</button>
+    </div>
+</div>

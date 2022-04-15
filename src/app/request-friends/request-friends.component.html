@@ -1,0 +1,293 @@
+<app-header></app-header>
+<ngx-spinner bdColor="rgba(255,255,255,0.7)" size="medium" color="#FF9000" type="ball-triangle-path"
+  [fullScreen]="true">
+</ngx-spinner>
+<div class="sidenav left">
+  <div class="friend_list">
+    <h3>Friends</h3>
+  </div>
+  <div class="receive_request" *ngIf="friend_req_hidden">
+    {{frd_req_get_count ? frd_req_get_count : ''}} friend requests
+    <div class="row" style="padding: 10px;" *ngFor="let frdProfile of frd_profile_datas;let i = index">
+      <div class="col-md-12" (click)="openProfile(frdProfile._id);">
+        <img width="60" height="60" [src]="frdProfile.profileImgURl" onerror="this.src='/assets/images/character.png';"
+          style="border-radius: 50%;" />
+        <label
+          style="color: #ffffff;margin-left: 10px;position: absolute;text-transform: capitalize;cursor: pointer;">{{frdProfile.name}}</label>
+      </div>
+      <div class="col-md-12" style="margin-left: 70px;bottom: 15px;">
+        <button type="button" name="button" style="background-color: #1e4a6b;border-color:#1e4a6b;"
+          [hidden]="accept_hideme[i] || hideme[i]" class="btn btn-primary"
+          (click)="confirm_request(frdProfile._id);accept_hideme[i] = !accept_hideme[i];hideme[i] = hideme[i];">Confirm</button>
+        <button type="button" name="button" style="margin-left: 15px;" class="btn btn-secondary"
+          [hidden]="hideme[i] || accept_hideme[i]"
+          (click)="reject_request(frdProfile._id);hideme[i] = !hideme[i];accept_hideme[i] = accept_hideme[i]">Cancel</button>
+        <label [hidden]="!accept_hideme[i] || hideme[i]">Accept request</label>
+        <label [hidden]="!hideme[i] || accept_hideme[i]">Reject request</label>
+      </div>
+    </div>
+  </div>
+  <div class="peopleknow_label">
+    <h6 class="people_title">People you may know</h6>
+  </div>
+  <div *ngIf="datas.length > 0; else elseData">
+    <div class="row" style="padding: 10px;" *ngFor="let data of datas;let i = index">
+      <div class="col-md-12 remove_people remove_people_{{data._id}}">
+        <img width="60" height="60" [src]="data.profileImgURl" onerror="this.src='/assets/images/character.png';"
+          style="border-radius: 50%;" (click)="openProfile(data._id);"/>
+        <div class="request_shows">
+          <label (click)="openProfile(data._id);">{{data.name}}</label>
+          <div class="remove_people_{{data._id}}">
+            <button type="button" *ngIf="friend_id.includes(data._id) != true"
+              class="btn btn-primary add_friend_btn add_friend_{{data._id}}" [hidden]="hideme[i]"
+              (click)="sendRequest(data._id);hideme[i] = !hideme[i];">Add Friend</button>
+            <button type="button" class="btn btn-secondary show_add_friend show_add_friend_{{data._id}}"
+              *ngIf="hideme[i] || friend_id.includes(data._id)"
+              (click)="remove_send_request(data._id);hideme[i] = hideme[i];">Cancel Request</button>
+            <button type="button" class="btn btn-secondary remove_friend_btn remove_friend_{{data._id}}"
+              [hidden]="hideme[i]" *ngIf="friend_id.includes(data._id) != true"
+              (click)="remove_people(data._id)">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #elseData>
+    <div><h5 style="color: #fff; text-align: center;"> Oops No Data Found </h5></div>
+  </ng-template>
+</div>
+
+<div class="viewProfile show_View" style="justify-content: center;display: flex;height:100%" *ngIf="showView != true">
+  <div class="container" style="position: relative;">
+    <div class="vertical-center" style="position: inherit;top: 50%;padding-top: 15px;transform: translateY(-50%);text-align: center;">
+      <div>
+        <img width="60" height="60" src='/assets/images/user.png' style="border-radius: 50%;" />
+      </div>
+      <div class="display_people_data">
+        Select people's names to preview their profile.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="viewProfile" style="padding-top: 101px;" *ngIf="showView">
+  <div class="friend_page_shows">
+    <button (click)="view_friend_list()" class="mobile_btn">
+      <img src="/assets/images/back_btn.png" alt="Back-Track">
+      <div class="back_btn">Go Back</div>
+    </button>
+    <div class="cover_pic" [ngStyle]="{ 'background-image': 'url(' + imageCov + ')', 'background-size': 'cover'}"></div>
+
+    <div class="bg-white profile_navbar">
+      <div class="profile_pic_main_tabs_sec width_95">
+        <div class="profile_pic position-relative profile_edit">
+          <div class="profile-pic-icon">
+            <img [src]="previewUrl" onerror="this.src='/assets/images/character.png';">
+          </div>
+          <div class="profile_name">{{name}}</div>
+        </div>
+
+        <div name="top" class="actions" id="myTopnav">
+          <a [routerLink]="['/friends/', login_id]" (click)="timeline_hide = true"><button id="timeline"
+              [routerLinkActive]="['active_tabs']" [routerLinkActiveOptions]="{exact: true}">Timeline</button></a>
+          <a [routerLink]="['about']" (click)="timeline_hide = false"><button id="about"
+              [routerLinkActive]="['active_tabs']">About</button></a>
+          <a [routerLink]="['photos']" (click)="timeline_hide = false"><button id="photos"
+              [routerLinkActive]="['active_tabs']">Photos</button></a>
+          <a [routerLink]="['videos']" (click)="timeline_hide = false"><button id="videos"
+              [routerLinkActive]="['active_tabs']">Videos</button></a>
+          <a [routerLink]="['friends']" (click)="timeline_hide = false"><button id="friends"
+              [routerLinkActive]="['active_tabs']">Friends</button></a>
+          <!-- <a (click)="timeline_hide = false"><button>More</button></a> -->
+        </div>
+        <div class="main_action"></div>
+      </div>
+    </div>
+
+    <div class="main d-flex">
+      <div class="load_area">
+        <ng-container *ngIf="timeline_hide">
+          <div *ngFor="let data of frd_datas; let i = index;" class="main_area">
+            <div *ngIf="data.status === 0" class="main_post_content d-flex flex-column">
+              <div class="d-flex" style="width: 100%; margin-bottom: 15px;" (mouseleave)="showbasicProfile[i]=false">
+                <div class="profile_pic_profile position-relative" (mouseover)="showbasicProfile[i]=true">
+                  <img [src]="profileImg" onerror="this.src='/assets/images/character.png';">
+                  <div class="basic_info" *ngIf="showbasicProfile[i]" (mouseleave)="showbasicProfile[i]=false">
+                    <div class="d-flex">
+                      <img [src]="profileImg" onerror="this.src='/assets/images/character.png';">
+                      <div style="padding: 10px;">
+                        <a href="profile/{{data.userId}}">
+                          <div class="profile_basic_info set_redirect_link">{{name ? name : 'Name'}}</div>
+                        </a>
+                        <div class="profile_basic_info"><i class="fas fa-user-tie"
+                            style="margin-right: 10px"></i>{{u_designation ? u_designation : 'Designation'}}</div>
+                        <div style="display: flex;" class="profile_basic_info"><i class="fas fa-envelope"
+                            style="margin-right: 10px"></i>{{u_email ? u_email : 'Email'}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="name_and_desc" style="width: 100%">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <a href="profile/{{u_id}}">
+                      <div class="profile_name_of_poster">{{u_name}}</div>
+                    </a>
+                    <div class="province d-flex align-items-center">
+                      <img src="assets/images/add_ob.png">
+                      <div>{{u_city ? u_city : 'City'}}, {{u_state ? u_state : 'Province'}}</div>
+                    </div>
+                  </div>
+                  <div style="color: #0F1B31; font-size: 14px;" *ngIf="data.name !== undefined">Album: {{data.name}}
+                  </div>
+                  <div class="item_desc mt-2" style="width: 100%;word-wrap: break-word;">{{data.description.length > 60
+                    ?
+                    (data.description | slice:0:60) + '...': data.description}}</div>
+                </div>
+              </div>
+              <div class="slider_bid_like-share d-flex flex-column" style="width: 100%" id="slider-owl-carousel-load">
+                <div *ngIf="data.imageUrl.length == 1">
+                  <div class="item timeline_section one_image">
+                    <ng-image-slider [imageSize]="{width: '100%', height: '320px'}" [showArrow]=false
+                      class="slider_image" [images]="data.imageUrl" #nav></ng-image-slider>
+                  </div>
+                </div>
+                <div *ngIf="data.imageUrl.length == 2">
+                  <div class="item timeline_section">
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '49.5%'}" [showArrow]=false class="slider_image"
+                      [images]="data.imageUrl" #nav></ng-image-slider>
+                  </div>
+                </div>
+                <div *ngIf="data.imageUrl.length == 3">
+                  <div class="item timeline_section" *ngIf="data.imageUrl[0].size == 100">
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '99%'}" animationSpeed=0.1 [showArrow]=false
+                      class="slider_image" [images]="data.imageUrl" #nav></ng-image-slider>
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '49.5%'}" [showArrow]=false
+                      class="slider_image_2" [images]="data.imageUrl" #nav></ng-image-slider>
+                  </div>
+                </div>
+                <div *ngIf="data.imageUrl.length == 4">
+                  <div class="item timeline_section">
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '49.5%'}" [showArrow]=false class="slider_image"
+                      [images]="data.imageUrl" #nav></ng-image-slider>
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '49.5%'}" [showArrow]=false
+                      class="slider_image_4" [images]="data.imageUrl" #nav></ng-image-slider>
+                  </div>
+                </div>
+                <div *ngIf="data.imageUrl.length > 4">
+                  <div class="item timeline_section">
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '49.5%'}" [showArrow]=false class="slider_image"
+                      [images]="data.imageUrl" #nav></ng-image-slider>
+                    <ng-image-slider [autoSlide]=0 [imageSize]="{width: '49.5%'}" [showArrow]=false
+                      class="slider_image_5" [images]="data.imageUrl" title="more" #nav></ng-image-slider>
+                  </div>
+                </div>
+                <!-- </div> -->
+                <div class="take_action">
+                  <button class="showLikes" (click)="likeIt(data._id, data.like.length);">
+                    <i class="fa" id="{{data._id}}"
+                      [ngClass]="postlikeId.includes(data._id) ? 'fa-thumbs-up': 'fa-thumbs-o-up'"></i>
+                    <!-- <div>Like<span id="count_{{data._id}}">{{data.like.length === 0 ? '' : data.like.length}}</span></div> -->
+                    <div>Like<span id="count_{{data._id}}">{{data.like.length !== 0 ? data.like.length + temLike :
+                        temLike
+                        == 0 ? "" : temLike}}</span></div>
+                  </button>
+
+                  <div class="tooltiptext" *ngIf="data.like.length > 0">
+                    <div *ngFor="let like of data.like">
+                      {{like.name}}
+                    </div>
+                  </div>
+
+                  <button class="comment_sec_{{data._id}} comment_sec" (click)="open_comments(data._id)">
+                    <i class="far fa-comment-dots"></i>
+                    <div *ngIf="data.comment.length !== 0">Comment<span>{{data.comment.length !== 0 ? (data._id ===
+                        tempPostId) ? data.comment.length + temCmnt.length : data.comment.length : ''}}</span></div>
+                    <div *ngIf="data.comment.length === 0">Comment<span>{{data.comment.length === 0 ? (data._id ===
+                        tempPostId) ? data.comment.length + temCmnt.length : '' :data.comment.length }}</span></div>
+                  </button>
+                  <button class="share_sec_{{data._id}} share_sec" (click)="share(data._id)"
+                    *ngIf="login_id !== data.userId">
+                    <i class="far fa-share"></i>
+                    <div *ngIf="data.share.length !== 0">Share <span> {{data.share.length !== 0 ? data.share.length :
+                        ''}}
+                      </span> </div>
+                  </button>
+                  <div class="sharing_container_{{data._id}} sharing_container" style="display: none;">
+                    <div class="share_users">
+                      <div class="user_profile" (click)="sharing(data._id, u_name)" style="cursor: pointer;">
+                        <p>Share with me!</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="write_comments">
+                  <form (ngSubmit)="addComments(data._id, cmntuname, cmntuprofile)" [formGroup]="commentsForm">
+                    <input type="text" autocomplete="off" placeholder=" Write a comment...!"
+                      formControlName="newcomment">
+                  </form>
+                </div>
+                <div class="comments_container_{{data._id}} comments_container" style="display: none;"
+                  *ngIf="data.comment.length > 0 || temCmnt.length > 0">
+                  <div class="comment_title">Comments:</div>
+                  <ng-container *ngFor="let temp of temCmnt.slice().reverse()">
+                    <div class="comment_user d-flex" *ngIf="checkTem && temp.postId === data._id">
+                      <img [src]="temp.profilePic" onerror="this.src='/assets/images/character.png';">
+                      <div>
+                        <div class="commenter">{{temp.userName}}</div>
+                        <div class="comment_here">{{temp.data}}</div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <div (mouseleave)="!showbasicProfile3[i]=false" class="comment_user d-flex"
+                    *ngFor="let comnt of data.comment.slice().reverse(); let i = index">
+                    <img [src]="comnt.profile" onerror="this.src='/assets/images/character.png';">
+                    <div>
+                      <a href="profile/{{comnt.userId}}" (mouseover)="!showbasicProfile3[i]=true">
+                        <div class="commenter">{{comnt.name}}</div>
+                      </a>
+                      <div class="comment_here">{{comnt.newcomment}}</div>
+                    </div>
+                    <div class="show_basic_info_card" (mouseleave)="showbasicProfile3[i]=false">
+                      <div class="basic_info2" *ngIf="showbasicProfile3[i]">
+                        <div class="d-flex">
+                          <img [src]="comnt.profile" onerror="this.src='/assets/images/character.png';"
+                            class="hover-info-img">
+                          <div class="basic_profile_icons">
+                            <a href="profile/{{comnt.userId}}">
+                              <div style="text-transform: capitalize;" class="profile_basic_info set_redirect_link">
+                                {{comnt.name}}</div>
+                            </a>
+                            <div class="icons_showing_card">
+                              <div class="profile_basic_info"><i class="fas fa-user-tie"
+                                  style="padding-right: 10px"></i>{{comnt.designation ? comnt.designation :
+                                'Designation'}}</div>
+                              <div style="display: flex;" class="profile_basic_info"><i class="fas fa-envelope"
+                                  style="margin-right: 10px"></i>{{comnt.email ? comnt.email : 'Email'}}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="main_area">
+            <div class="no_post_friend" *ngIf="msg">
+              <h6>No Posts Yet</h6>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="main_area">
+          <ng-container *ngIf="!timeline_hide">
+            <router-outlet></router-outlet>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

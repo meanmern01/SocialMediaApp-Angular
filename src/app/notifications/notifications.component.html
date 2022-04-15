@@ -1,0 +1,28 @@
+<div class="container notification_body">
+	<div class="noti_body">
+		<p>Notifications</p>
+		<div class="noti_scroll" *ngIf="!show">
+			<div class="all_notification" *ngFor="let data of notif_data | slice:0:totalDisplay">
+				<div class="notifiy d-flex flex-column">
+					<div class="child-notifiy d-flex align-items-center">
+						<img [src]="data.userprofile" onerror="this.src='../../assets/images/character.png'">
+						<div class="notify_content" style="word-break: break-all;">
+							<a *ngIf="data.userPostId" href="profile/{{data.userPostId}}" style="color: #000;">
+								{{data.content | titlecase }} </a>
+							<a *ngIf="data.userLikedId" href="profile/{{data.userLikedId}}" style="color: #000;">
+								{{data.content | titlecase }} </a>
+							<a *ngIf="data.userCommentId" href="profile/{{data.userCommentId}}" style="color: #000;">
+								{{data.content | titlecase }} </a>
+						</div>
+					</div>
+					<div class="time_ago">{{data.date | timeago}}</div>
+				</div>
+			</div>
+		</div>
+		<ng-container *ngIf="show">
+			<div class="main_post_content d-flex flex-column" style="color: #0F1B31">
+				<h6> {{show}} </h6>
+			</div>
+		</ng-container>
+	</div>
+</div>

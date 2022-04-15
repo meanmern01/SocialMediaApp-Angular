@@ -1,0 +1,50 @@
+<div class="contain">
+    <ul id="myTab" class="nav nav-tabs">
+        <li><a href="#home" data-toggle="tab" class="active ? '' : active">Your Photos</a></li>
+        <li><a href="#album" data-toggle="tab">Albums</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in show" id="home">
+            <div *ngIf="urls.length !== 0">
+                <div class="img-bg">
+                    <div>
+                        <div class="item photos_section">
+                            <ng-image-slider [imageSize]="{width: '100%', height: '100%', space: 3}"
+                                [animationSpeed]="0.5" [showArrow]=false class="slider_image_photos"
+                                [images]="urls | slice:0:totalDisplay"></ng-image-slider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="shows">
+                <div class="main_post_content d-flex flex-column" style="color: #0F1B31">
+                    <h6>{{shows}}</h6>
+                </div>
+            </ng-container>
+        </div>
+        <div class="tab-pane fade" id="album">
+            <div class="container">
+                <div class="main_area_contents">
+                    <div class="album_nulls main_post_content" *ngIf="album && !album_show">
+                        <p>{{album}}</p>
+                    </div>
+                    <div class="write_words position-relative">
+                        <div *ngIf="album_show && user === id" class="show_images" (click)="openTextDialog($event)">
+                            <img style="position: relative;top: 38%;" src="../../assets/images/plus.png" width="40px"
+                                height="40px" alt="add images" title="upload images">
+                        </div>
+                        <div class="show_album_images" *ngFor="let data of album_urls">
+                            <ng-image-slider [animationSpeed]="0.3" [videoAutoPlay]="true"
+                                [imageSize]="{width: 150, height: 120}" [showArrow]=false class="slider_image_photos"
+                                [images]="data.imageUrl"></ng-image-slider>
+                            <i *ngIf="album_show && user === id" (click)="delAlbum(data._id, data.name)"
+                                class="pencil-icon fa fa-trash" title="Delete Album"></i>
+                            <p class="album_names"> {{data.name.length > 20 ? (data.name | slice:0:20) + '...':
+                                data.name}} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

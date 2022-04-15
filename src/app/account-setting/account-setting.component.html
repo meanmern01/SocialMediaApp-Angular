@@ -1,0 +1,54 @@
+<div app-theme class="main_areas">
+    <div class="contain">
+        <div class="header">
+            <p>General Account Settings</p>
+        </div>
+        <app-themes></app-themes>
+        <div class="body">
+            <div class="setting_details" *ngIf="name_shows">
+                <div class="input_section">
+                    <p>Name:</p>
+                    <div class="name_show"> {{name ? name : 'Name'}} </div>
+                </div>
+                <button type="button" name="button" (click)="edit_names()">Edit</button>
+            </div>
+            <div class="setting_details_hide" *ngIf="edit_name">
+                <div class="input_section">
+                    <p>Name:</p>
+                    <input #nameText type="text" [(ngModel)]="name" name="name" id="name" [value]="datas.name"
+                        autocomplete="off">
+                </div>
+                <div style="display: flex;">
+                    <button type="button" name="button" [disabled]="!name || !(name?.length > 1)"
+                        (click)="save_names(name)">Save</button>
+                    <button type="button" name="button" (click)="cancel_names()">Cancel</button>
+                </div>
+            </div>
+            <div class="setting_details" *ngIf="user_shows">
+                <div class="input_section">
+                    <p>Username:</p>
+                    <div class="username_show"> {{user ? user : 'Username'}} </div>
+                </div>
+                <button type="button" name="button" (click)="edit_users()">Edit</button>
+            </div>
+            <div class="setting_details_hide" *ngIf="edit_user">
+                <div class="input_section">
+                    <p>Username:</p>
+                    <input #nameText type="text" [(ngModel)]="user" name="user" id="user" [value]="datas.userName"
+                        autocomplete="off">
+                </div>
+                <div style="display: flex;">
+                    <button type="button" name="button" [disabled]="!user || !(user?.length > 1)"
+                        (click)="save_users(user)">Save</button>
+                    <button type="button" name="button" (click)="cancel_users()">Cancel</button>
+                </div>
+            </div>
+            <div class="setting_details">
+                <div class="input_section">
+                    <p>Contact:</p>
+                    <div class="email_show"> {{datas.emailId ? datas.emailId : 'Contact'}} </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

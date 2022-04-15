@@ -1,0 +1,95 @@
+<app-header>
+</app-header>
+<div class="main_container d-flex align-items-start">
+    <div class="left_sidebar">
+        <div class="profile_image">
+            <img [src]="user_profile" onerror="this.src='/assets/images/character.png';">
+        </div>
+        <div class="profile_name">{{name}}</div>
+        <div class="friends_Posts d-flex align-items-center">
+            <div class="total_friends_of_user d-flex align-items-center">
+                <div class="my_friends">Friends</div>
+                <div class="my_friends_numbers">{{count_frd <= 100 ? count_frd : '100+' }}</div>
+                </div>
+                <div class="total_posts_of_user d-flex align-items-center">
+                    <div class="my_friends">Posts</div>
+                    <div class="my_friends_numbers">{{user_post <= 100 ? user_post : '100+' }}</div>
+                    </div>
+                </div>
+                <a class="my_post_links" href="profile/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user"></i>
+                        <div>Go to your Profile</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="account/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user-cog"></i>
+                        <div>Account Setting</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="friends/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user-plus"></i>
+                        <div class="badges_for_fr position-relative"
+                            [attr.data-content]="frd_request_count !== 0 ? frd_request_count : ''">Friend Requests</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="search/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-search-plus"></i>
+                        <div>Search for someone</div>
+                    </div>
+                </a>
+                <!-- <a class="my_post_links" href="theme">
+            <div class="left_content">
+                <i class="fas fa-cog"></i>
+                <div>Customization</div>
+            </div>
+        </a> -->
+            </div>
+            <div class="main_area">
+                <div class="main_area_content timeline">
+                    <div class="main_post_content d-flex flex-column">
+                        <div class="d-flex">
+                            <div class="d-flex justify-content-between">
+                                <div class="profile_name_of_poster">Peoples May You Know</div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="search_display" *ngIf="shows">
+                            <div class="d-flex allusers_set" *ngFor="let user of allUsers;let i = index">
+                                <div class="profile_pic position-relative">
+                                    <img [src]="user.profileImgURl" onerror="this.src='/assets/images/character.png';">
+                                </div>
+                                <div class="name_and_desc">
+                                    <div class="d-flex justify-content-between">
+                                        <a href="profile/{{user._id}}">
+                                            <div class="profile_name_of_poster">{{user.name}}</div>
+                                        </a>
+                                        <span *ngIf="mutulFrdcount" class="mutual_frd">{{mutulFrdcount}} mutual
+                                            friends</span>
+                                    </div>
+                                </div>
+                                <div class="icon_container d-flex justify-content-end">
+                                    <div class="position-relative Send_request_icon">
+                                        <i class="fas fa-user-plus" id="open"
+                                            *ngIf="friend_id.includes(user._id) !== true" [hidden]="hideme[i]"
+                                            (click)="sendRequest(user._id);hideme[i] = !hideme[i]"
+                                            title="Send Request"></i>
+                                        <i class="fas fa-user-times" id="close"
+                                            *ngIf="hideme[i] || friend_id.includes(user._id)"
+                                            (click)="reject_request(user._id);hideme[i] = !hideme[i]"
+                                            title="Cancel Request"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;flex-direction: column;" *ngIf="!shows">
+                            <h4 class="friends_shows">Oops no friend suggestions</h4>
+                            <p class="make_friends">Please add some friends first</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

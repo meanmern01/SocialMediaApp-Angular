@@ -1,0 +1,25 @@
+<div class="login_container">
+  <form class="form-login" [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="display: flex;">
+    <div>
+      <input type="text" autocomplete="off" formControlName="email" name="email" id="email"
+        placeholder="Email or phone">
+    </div>
+    <div>
+      <div class="d-flex align-items-center login-passerror" style="align-items: baseline !important;">
+        <div class="pass-error">
+          <div class="pass-class">
+            <input [type]="show ? 'text' : 'password'" formControlName="password" name="password" id="password"
+              placeholder="Password">
+            <div class="input-group icon-password" (click)="passShow($event)">
+              <i [ngClass]="show === false ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+            </div>
+            <div>
+              <a class="forget-link" href="/forget">Forget Password</a>
+            </div>
+          </div>
+        </div>
+        <button style="margin: 0px 10px 24px -4px">Login</button>
+      </div>
+    </div>
+  </form>
+</div>

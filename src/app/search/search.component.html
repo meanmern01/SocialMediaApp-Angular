@@ -1,0 +1,141 @@
+<ngx-spinner bdColor="rgba(255,255,255,0.7)" size="medium" color="#FF9000" type="ball-triangle-path"
+    [fullScreen]="true">
+</ngx-spinner>
+<app-header>
+</app-header>
+<div class="main_container d-flex align-items-start">
+    <div class="left_sidebar">
+        <div class="profile_image">
+            <img [src]="user_profile" onerror="this.src='/assets/images/character.png';">
+        </div>
+        <div class="profile_name">{{name}}</div>
+        <div class="friends_Posts d-flex align-items-center">
+            <div class="total_friends_of_user d-flex align-items-center">
+                <div class="my_friends">Friends</div>
+                <div class="my_friends_numbers">{{count_frd <= 100 ? count_frd : '100+' }}</div>
+                </div>
+                <div class="total_posts_of_user d-flex align-items-center">
+                    <div class="my_friends">Posts</div>
+                    <div class="my_friends_numbers">{{user_post <= 100 ? user_post : '100+' }}</div>
+                    </div>
+                </div>
+                <a class="my_post_links" href="profile/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user"></i>
+                        <div>Go to your Profile</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="#">
+                    <div class="left_content">
+                        <i class="fas fa-user-cog"></i>
+                        <div>Account Setting</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="friends/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-user-plus"></i>
+                        <div class="badges_for_fr position-relative"
+                            [attr.data-content]="frd_request_count !== 0 ? frd_request_count : ''">Friend Requests</div>
+                    </div>
+                </a>
+                <a class="my_post_links" href="peopleknow/{{id}}">
+                    <div class="left_content">
+                        <i class="fas fa-users"></i>
+                        <div class="badges_for_pymk position-relative"
+                            [attr.data-content]="countSuggest !== 0 ? countSuggest : ''">People you may know</div>
+                    </div>
+                </a>
+                <!-- <a class="my_post_links" href="theme">
+            <div class="left_content">
+                <i class="fas fa-cog"></i>
+                <div>Customization</div>
+            </div>
+        </a> -->
+            </div>
+            <div class="main_area">
+                <div class="main_area_content post">
+                    <div class="post position-relative">
+                        <form style="width: 100%">
+                            <ng-autocomplete class="autocomplete-container" #searchText [data]="allUsers"
+                                placeHolder="Search friends" value="" [searchKeyword]="keyword"
+                                [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                            </ng-autocomplete>
+
+                            <ng-template #itemTemplate let-item>
+                                <div class="d-flex allusers_set" style="padding-left: 15px">
+                                    <div class="profile_pic position-relative">
+                                        <img [src]="item.profileImgURl"
+                                            onerror="this.src='/assets/images/character.png';">
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="profile/{{item._id}}">
+                                                <div class="profile_name_of_poster" [innerHTML]="item.name"></div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <ng-template #notFoundTemplate let-notFound>
+                                <div [innerHTML]="notFound"></div>
+                            </ng-template>
+                        </form>
+                    </div>
+                </div>
+                <div class="main_area_content timeline">
+                    <div class="main_post_content d-flex flex-column">
+                        <div class="d-flex">
+                            <div class="d-flex justify-content-between">
+                                <div class="profile_name_of_poster">Peoples</div>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <div class="search_display">
+                        <ng-container *ngIf="search_by_name == false">
+                            <div class="d-flex allusers_set" *ngFor="let user of allUsers;let i = index">
+                                <div class="profile_pic position-relative">
+                                    <img [src]="user.profileImgURl" onerror="this.src='/assets/images/character.png';">
+                                </div>
+                                <div class="name_and_desc">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="profile/{{user._id}}">
+                                            <div class="profile_name_of_poster">{{user.name}}</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="icon_container d-flex justify-content-end">
+                                    <div class="position-relative Send_request_icon">
+                                        <i class="fas fa-user-plus" id="open"
+                                            *ngIf="friend_id.includes(user._id) != true" [hidden]="hideme[i]"
+                                            (click)="sendRequest(user._id,user.name);hideme[i] = !hideme[i]"
+                                            title="Send Request"></i>
+                                        <i class="fas fa-user-times" id="close"
+                                            *ngIf="hideme[i] || friend_id.includes(user._id)"
+                                            (click)="reject_request(user._id);hideme[i] = !hideme[i]"
+                                            title="Cancel Request"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <ng-container *ngIf="search_by_name == true">
+                        <div class="d-flex allusers_set" *ngFor="let dt_name of search_data">
+                            <div class="profile_pic position-relative">
+                                <img [src]="dt_name.profileImgURl" onerror="this.src='/assets/images/character.png';">
+                            </div>
+                            <div class="name_and_desc">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="profile_name_of_poster">{{dt_name.name}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center" *ngIf="noRecord">
+                            <h5>We didn't find any results</h5>
+                            <h6>Make sure that everything is spelt correctly or try different keywords.</h6>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>

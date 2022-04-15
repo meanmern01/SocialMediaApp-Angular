@@ -1,0 +1,18 @@
+<div class="hide_theme" app-theme>
+    <div class="theme_main">
+        <h1> Choose Theme</h1>
+        <div class="back_btn" style="margin-top: 10px;">
+            <a [routerLink]="['/home/', id]"><i class="fas fa-arrow-circle-left fa-2x"></i></a>
+        </div>
+        <div class="theme_submain" style="margin-top: 10px;margin-left: 15px;">
+            <p>Choose Your Theme</p>
+            <div class="sub_theme">
+                <select name="relationship" [(ngModel)]="themeChange">
+                    <option value="light" selected="selected">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+                <button class="btn btn-primary" (click)="submit(themeChange)" style="margin-left: 20px;">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

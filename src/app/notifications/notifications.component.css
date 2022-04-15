@@ -1,0 +1,49 @@
+.noti_body {
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0px 1px 15px 0px rgba(0, 52, 89, 0.58);
+    position: relative;
+    top: 25px;
+    border-radius: 4px;
+    padding: 25px 15px;
+}
+.hide_theme{
+	display: none;
+}
+.all_notification{
+    padding: 0 10px;
+    margin-bottom: 5px;
+    border: 2px solid #e1ebf3;
+}
+.noti_scroll .notify_content {
+    font-size: 15px;
+}
+.noti_body p {
+    margin: 0px 0 15px;
+    font-size: 20px;
+    color: var(--secondary-color);
+    line-height: 1;
+    font-family: var(--josefin-sans);
+}
+.noti_scroll {
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+}
+.notification_body{
+    padding: 0;
+    margin-left: auto !important;
+    width: 100%;
+    margin: 0;
+}
+.main_area {
+    flex: 3.5;
+    margin: 0 25px;
+    margin-right: 0;
+}
+@media (max-width: 320px) {
+    .child-notifiy{
+        flex-direction: column;
+    }
+}

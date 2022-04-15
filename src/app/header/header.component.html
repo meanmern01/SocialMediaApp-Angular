@@ -1,0 +1,58 @@
+<header>
+  <div class="header_alignment d-flex justify-content-between align-items-center">
+    <div class="logo">
+      <a [routerLink]="['/home/', id]"><img class="logo" src="assets/images/logo2.png"></a>
+    </div>
+    <div class="ads d-flex align-items-center justify-content-center">advertisements here</div>
+    <div class="login_container d-flex justify-content-end align-items-center">
+      <div class="icon_initiallize mr-3" style="background: none;">
+        <div class="notification" style="background: none; cursor: pointer;" (clickOutside)="onClickedOutside($event)">
+          <a data-toggle="collapse" href="#collapseExample" role="button" (click)="toggleDetect()" aria-expanded="false"
+            aria-controls="collapseExample">
+            <img src="assets/images/bell-ring.png" alt="Slidicon" width="30px">
+          </a>
+        </div>
+
+        <div class="chatting" style="background: none; cursor: pointer;" *ngIf="!chat" (click)="chatting(); chat=!chat">
+          <!-- <a [routerLink]="['/chating/', id]"> -->
+          <img src="assets/images/chat_icon_homepage.png" alt="Chatting" width="30px">
+          <!-- </a> -->
+        </div>
+      </div>
+      <div class="position-relative">
+        <img class="logout" src="assets/images/logout.png">
+        <button (click)="logout()">Log out</button>
+      </div>
+    </div>
+    <div class="collapse" id="collapseExample">
+      <div *ngIf="notif_data.length > 0; else elseNotify" class="card card-body" style="background: #f0f8ff;">
+        <div class="all_notification" *ngFor="let data of notif_data | slice:0:6"
+          style="padding: 10px 0 0 0; border-bottom: 2px solid #ff9100;">
+          <div class="d-flex flex-column">
+            <div class="child-notifiy d-flex align-items-center">
+              <img [src]="data.userprofile" onerror="this.src='../../assets/images/character.png'" width="30px">
+              <div class="notify_content" style="word-break: break-all;">
+                <a *ngIf="data.userPostId" href="profile/{{data.userPostId}}#{{data.phostImg[0].split('/').pop()}}"
+                  style="color: #000;"> {{data.content | titlecase }} </a>
+                <a *ngIf="data.userLikedId" href="profile/{{data.userLikedId}}" style="color: #000;"> {{data.content |
+                  titlecase }} </a>
+                <a *ngIf="data.userCommentId" href="profile/{{data.userCommentId}}" style="color: #000;"> {{data.content
+                  | titlecase }} </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="view_all_notification" style="text-align: center; padding-top: 1em;">
+          <a href="profile/{{id}}/notifications"
+            style="padding: 5px 10px;color: #fff; background: #ff8100;border-radius: 4px;">View All</a>
+        </div>
+      </div>
+      <ng-template #elseNotify class="card card-body" style="background: #f0f8ff;">
+        <div class="view_all_notification"
+          style="text-align: center; padding: 1em; background: #fff; border-radius: 8px;">
+          <a style="padding: 5px 10px;color: #fff; background: #ff8100;border-radius: 4px;">No notification till now</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</header>

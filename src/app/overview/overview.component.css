@@ -1,0 +1,14 @@
+/* .overview-main{
+  padding-bottom: 32px;
+} */
+
+.overview_tab img {
+  /* font-size: 10px !important; */
+  width: 17px;
+  color: var(--secondary-color);
+  /* background-color: var(--secondary-color); */
+  margin-right: 5px;
+}
+.hide_theme{
+	display: none;
+}

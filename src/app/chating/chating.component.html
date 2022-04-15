@@ -1,0 +1,124 @@
+<div class="chat_header">
+  <app-header></app-header>
+</div>
+
+<div class="main_div">
+  <div class="sidenav left">
+    <div class="friend_list">
+      <h3>Friends</h3>
+    </div>
+    <div class="parent_chat_panel" *ngIf="frdDetails.length > 0; else elseFriend">
+      <div class="chat_panel main_{{data._id}}" *ngFor="let data of frdDetails;let i = index">
+        <div class="remove_people remove_people_{{data._id}}" (click)="openChat(data._id, data.name)">
+          <div class="request_shows online_sec">
+            <div class="online_titles" [ngClass]="data.content == 1 ? 'online': 'offline'">
+              <img [src]="data.profileImgURl" onerror="this.src='/assets/images/character.png';"
+                style="border-radius: 50%;" />
+            </div>
+            <div class="user_name">{{data.name}}</div>
+            <span *ngIf="data.msg > 0" class="msg_counter"> {{data.msg}} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #elseFriend class="card card-body">
+      <div class="view_all_notification"
+        style="text-align: center;">
+        <a style="padding: 5px 10px;color: #fff;">No Friends Please make some friends to chat with them. 😊</a>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="viewProfile show_View" *ngIf="showView">
+    <div class="container">
+      <div class="vertical-center" style="text-align: center;">
+        <div class="display_people_data">
+          Select people's names to start chatting with them.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="viewProfile" *ngIf="!showView">
+  <button (click)="view_chat_list()" class="mobile_btn">
+    <img src="/assets/images/back_btn.png" alt="Back-Track">
+    <div class="back_btn">Go Back</div>
+  </button>
+  <div class="chat-messages">
+    <div class="chat-messages-show-container" #content>
+      <ul class="chat-messages-show-list" id="message-list">
+        <li *ngFor="let chat of chat_messages" #messages
+          [ngStyle]="{'text-align':chat.senderID === current_user_id ? 'right' : 'left', 'justify-content': chat.senderID === current_user_id ? 'flex-end' : 'flex-start'}"
+          style="display: flex;">
+          <div [ngStyle]="{'background':chat.senderID === current_user_id ? '#ffffff' : '#0F1B31'}"
+            class="chat_message_div">
+            <div>
+              <span [ngStyle]="{'color':chat.senderID === current_user_id ? '#0F1B31' : '#ffffff'}">{{chat.message ?
+                chat.message : message}}</span>
+              <span style="padding-left: 5px;" *ngIf="chat.senderID === current_user_id"> <img
+                  [src]="chat.status == 0 ? '../../assets/images/check.png' : '../../assets/images/check2.png'"
+                  width="15px" alt="">
+              </span>
+            </div>
+            <div [ngStyle]="{'color':chat.senderID === current_user_id ? '#949292' : '#909090'}"
+              style="font-size: 12px;"> {{chat.createdAt | timeago}} </div>
+          </div>
+        </li>
+      </ul>
+      <div class="default_thumbnail" *ngIf="chat_messages.length == 0">
+        <h1>Say Hi to your friend</h1>
+      </div>
+    </div>
+    <div class="chat-messages-create-container">
+      <i id="typing" *ngIf="msg_status"> {{msg_typing}} </i>
+      <input autocomplete="off" id="message" class="chat-messages-create-input" [(ngModel)]="message"
+        (ngModelChange)="NotifyMessage(message, $event)" type="text" (keyup.enter)="SendMessage()"
+        placeholder="Type your message here...">
+      <button class="chat-messages-create-button" [disabled]="!message" (click)="SendMessage()"> Send </button>
+      <button type="button" class="btn btn-primary video_calling" data-toggle="modal" data-target="#myModal"> <img
+          src="../../assets/images/chat.png" alt="" width="20px" height="20px"> </button>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal" style="margin-top: 0;" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"> {{temp_name}} </h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div id="app">
+          <!-- <span id="myid"> </span> -->
+          <div class="videoContainer">
+            <video id="remoteview" autoplay width="600px" height="400px"></video>
+            <video id="selfview" autoplay width="300px" height="150px"></video>
+            <div class="audio_video_container">
+              <a id="audio_on" (click)="Audio_Change(0)"><img class="image_icon" src="../../assets/images/audio_up.png"
+                  alt=""></a>
+              <a id="audio_off" (click)="Audio_Change(1)" style="display: none;"><img class="image_icon"
+                  src="../../assets/images/audio_down.png" alt=""></a>
+              <a id="video_on" (click)="Video_Change(0)"><img class="video_icon" src="../../assets/images/video_up.png"
+                  alt=""></a>
+              <a id="video_off" (click)="Video_Change(1)" style="display: none;"><img class="video_icon"
+                  src="../../assets/images/video_down.png" alt=""></a>
+            </div>
+          </div>
+          <div id="list">
+            <button class="btn btn-primary call_btn" (click)="callUser(check_user)"> <img
+                src="../../assets/images/telephone.png" alt="" width="30px" height="30px"></button>
+            <button id="endCall" class="btn btn-danger" style="display: none;" (click)="endCurrentCall()"><img
+                src="../../assets/images/reject.png" alt="" width="30px" height="30px"> </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

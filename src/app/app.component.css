@@ -1,0 +1,9 @@
+*{
+    color: #043458;
+}
+@media (max-width: 767px) {
+    .row .mrgbtm {
+      flex-wrap: inherit;
+    }
+  }
+

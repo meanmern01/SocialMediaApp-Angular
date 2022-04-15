@@ -1,0 +1,47 @@
+<div class="sign_up_sec">
+  <div class="sign_up_conatiner">
+    <div class="sign_up_title">Create an account</div>
+    <div class="sign_up_subtitle">it's real quick and safe</div>
+    <div class="form_of_sign_up d-flex flex-column">
+      <form [formGroup]="registerForm" (ngSubmit)="registerUser()" autocomplete="off">
+        <div class="form-group" [ngClass]="{ 'has-error': isSubmitted && formControls.email.errors }">
+          <input autocomplete="off" formControlName="email" id="email" class="form-control" type="email"
+            placeholder="Mobile number or email">
+          <div *ngIf="isSubmitted && formControls.email.errors">
+            <div *ngIf="formControls.email.errors.required" class="error">Email is required.</div>
+            <div *ngIf="formControls.email.errors.email" class="error">Please enter valid email address.</div>
+          </div>
+        </div>
+
+        <div class="form-group" [ngClass]="{ 'has-error': isSubmitted && formControls.name.errors }">
+          <input autocomplete="off" formControlName="name" id="name" class="form-control" type="text"
+            placeholder="Full name">
+          <div *ngIf="isSubmitted && formControls.name.errors">
+            <div *ngIf="formControls.name.errors.required" class="error">Full name is required.</div>
+          </div>
+        </div>
+
+        <div class="form-group" [ngClass]="{ 'has-error': formControls.uname.errors }">
+          <input autocomplete="username" formControlName="uname" id="uname" class="form-control" type="text"
+            placeholder="User name">
+          <div *ngIf="isSubmitted && formControls.uname.errors">
+            <div *ngIf="formControls.uname.errors.required" class="error">User name is required.</div>
+          </div>
+        </div>
+
+        <div class="form-group" [ngClass]="{ 'has-error': formControls.password.errors }">
+          <input autocomplete="new-password" formControlName="password" id="password" class="form-control" type="password"
+            placeholder="Password">
+          <div *ngIf="isSubmitted && formControls.password.errors">
+            <div *ngIf="formControls.password.errors.required" class="error">Password is required.</div>
+            <div *ngIf="formControls.password.errors.minlength" class="error">Password should be greter than 6
+              character.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-full">Sign up</button>
+      </form>
+    </div>
+    <div class="privacy_aggrement">By signing up, you agree to our Terms, Data Policy and Cookies Policy.</div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="overview-main">
+    <div class="overview_tab">
+        <i class="fas fa-briefcase"></i>
+        <div>
+            <span>{{u_designation ? u_designation : 'Designation'}}</span>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fas fa-home"></i>
+        <div>
+            <div><span>{{u_city ? u_city : 'City'}}, {{u_state ? u_state : 'State'}}, {{u_country ? u_country : 'Country'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fas fa-phone"></i>
+        <div>
+            <div><span>{{u_number ? u_number : 'Number'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fas fa-envelope"></i>
+        <div>
+            <div><span>{{u_address ? u_address : 'Email'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fas fa-link"></i>
+        <div>
+            <div><span>{{u_website ? u_website : 'Website'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fas fa-pray"></i>
+        <div>
+            <div><span>{{u_religious ? u_religious : 'Religious'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <img src="../../assets/images/love.png" alt="Relationship status">
+        <div>
+            <div><span>{{u_status ? u_status : 'Relationship'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fas fa-user"></i>
+        <div>
+            <div><span>{{u_gender ? u_gender : 'Gender'}}</span></div>
+        </div>
+    </div>
+    <div class="overview_tab">
+        <i class="fa fa-birthday-cake"></i>
+        <div>
+            <div><span>{{u_birthdate ? (u_birthdate | date) : 'BirthDate'}}</span></div>
+        </div>
+    </div>
+</div>

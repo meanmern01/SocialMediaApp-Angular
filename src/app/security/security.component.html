@@ -1,0 +1,43 @@
+<div app-theme class="main_areas">
+    <div class="contain">
+        <div class="header">
+            <p>Security and Login</p>
+        </div>
+        <!-- <app-themes></app-themes> -->
+        <div class="body">
+            <div class="setting_details">
+                <div class="input_section">
+                    <p>User ID:</p>
+                    <div class="name_show"> {{data.userId ? data.userId : 'User ID'}} </div>
+                </div>
+            </div>
+            <div class="setting_details">
+                <div class="input_section">
+                    <p>Email:</p>
+                    <div class="username_show"> {{user_data.emailId ? user_data.emailId : 'Email'}} </div>
+                </div>
+            </div>
+            <div class="setting_details pass">
+                <div class="pass_section">
+                    <p>Password</p>
+                    <!-- <div *ngIf="enter_pass" class="encrypt_pass"> {{user_data.password}} </div> -->
+                    <div *ngIf="change_pass" class="error_msgs">
+                        <input *ngIf="input_pass" type="password" name="pass" id="pass" minlength="10"
+                            [(ngModel)]="pass" placeholder="Please enter password"
+                            ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/">
+                        <span style="color: red;" *ngIf="pass?.length < 10"> Password should be greater than 10 letters
+                        </span>
+                        <span style="color: red;" *ngIf="!pass">Password is required</span>
+                        <div class="change_button" *ngIf="change_pass">
+                            <button type="button" name="button" [disabled]="!pass || !(pass?.length > 9)"
+                                (click)="changePass(pass)">Changes</button>
+                            <button type="button" type="button" (click)="cancel_btn()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <button *ngIf="enter_pass" type="button" name="button" (click)="enterpass()"> Change</button>
+
+            </div>
+        </div>
+    </div>
+</div>
